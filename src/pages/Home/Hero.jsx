@@ -1,6 +1,27 @@
 import React, { useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import { horizontalSpace, spaceBetweenSection } from '../../styles/style';
 import daisyImage from '../../assets/daisy.jpg';
+
+
+function MyMapContainer({lat,lon}) {
+  return (
+    <MapContainer center={[lat, lon]} zoom={13} style={{height:'400px', width: '100%'}}>
+      <TileLayer
+        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <Marker position={[lat, lon]}>
+          <Popup>
+            Lokasi: {lat}, {lon}
+          </Popup>
+        </Marker>
+    </MapContainer>
+  );
+}
+
+export {MyMapContainer};
 
 export default function Hero() {
   const [method, setMethod] = useState('auto');
@@ -65,6 +86,8 @@ export default function Hero() {
           humidity,
           dewPoint,
           iconUrl,
+          lat: data.coord.lat,
+          lon: data.coord.lon,
         });
 
         showPlantRecommendations(temp, humidity, description);
@@ -95,7 +118,7 @@ export default function Hero() {
   return (
     <>
       <section
-        className="relative bg-cover bg-center text-white flex flex-col items-center text-center py-20 px-4"
+        className="relative bg-cover bg-center text-white justify-center flex flex-col items-left text-center pl-40 h-svh"
         style={{
           backgroundImage: `url(${daisyImage})`,
         }}
@@ -104,7 +127,7 @@ export default function Hero() {
 
         <div className="relative z-10 max-w-3xl px-6 text-left">
           <h1 className="text-3xl md:text-5xl font-bold mb-4">
-            Selamat Datang di Weather & Bloomm
+            Selamat Datang <br />di Weather & Bloom
           </h1>
           <p className="text-lg md:text-xl mb-8">
             Weather & Bloom adalah situs web pendeteksi cuaca yang mudah digunakan untuk memberikan rekomendasi tanaman berdasarkan informasi cuaca terkini di kota Anda. Cukup masukkan nama kota, dan kami akan memberikan data cuaca yang akurat dan terkini agar tanaman Anda dapat tetap tumbuh dengan baik walaupun saat cuaca sulit diprediksi.
@@ -116,7 +139,7 @@ export default function Hero() {
       </section>
 
       <div className="weather-container p-8 max-w-2xl mx-auto bg-white rounded-lg shadow-xl mt-8">
-        <h2 className="text-3xl font-semibold mb-6 text-center text-gray-800">Weather Detection</h2>
+        <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">Pendeteksi Cuaca</h2>
 
         <div className="radio-group mb-6 text-center">
           <label className="mr-4 text-lg inline-block">
@@ -174,6 +197,7 @@ export default function Hero() {
         )}
 
         {weatherData && (
+          <>
           <div className="weather-result mt-6 text-center">
             <p className="text-lg font-semibold">City: {weatherData.cityName}</p>
             <img
@@ -191,6 +215,9 @@ export default function Hero() {
             <p className="text-lg">Humidity: {weatherData.humidity}%</p>
             <p className="text-lg">Dew Point: {weatherData.dewPoint}°C</p>
           </div>
+          
+          <MyMapContainer lat={weatherData.lat} lon={weatherData.lon}/>
+          </>
         )}
       </div>
 

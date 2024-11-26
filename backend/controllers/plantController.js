@@ -1,11 +1,12 @@
 import { query } from "../database/db.js";
 
-export const getWeatherData = async () => {
+export const getPlantRecommendation = async () => {
     try {
-        const weather = await query("SELECT * FROM home_weather_data");
-        res.json(weather);
+        const plants = await query("SELECT * FROM home_plant_recommendation");
+        res.json(plants);
     } catch (error) {
-        console.error("Error fetching weather information:", error);
-        res.status(500).send("Error fetching weather data");
+        console.error("Error fetching plants", error);
+        res.status(500).send("Error fetching plants");
     }
+    
 };

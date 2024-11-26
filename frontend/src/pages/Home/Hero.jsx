@@ -1,22 +1,22 @@
+// Hero.js
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { horizontalSpace, spaceBetweenSection } from '../../styles/style';
 import daisyImage from '../../assets/daisy.jpg';
 
-
-function MyMapContainer({lat,lon}) {
+function MyMapContainer({lat, lon}) {
   return (
     <MapContainer center={[lat, lon]} zoom={13} style={{height:'400px', width: '100%'}}>
       <TileLayer
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker position={[lat, lon]}>
-          <Popup>
-            Lokasi: {lat}, {lon}
-          </Popup>
-        </Marker>
+      />
+      <Marker position={[lat, lon]}>
+        <Popup>
+          Lokasi: {lat}, {lon}
+        </Popup>
+      </Marker>
     </MapContainer>
   );
 }
@@ -38,7 +38,7 @@ export default function Hero() {
 
   // Mengambil data cuaca manual berdasarkan kota
   const getWeatherManual = async () => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    const url = https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric;
     fetchWeather(url);
   };
 
@@ -48,7 +48,7 @@ export default function Hero() {
       navigator.geolocation.getCurrentPosition(function (position) {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+        const url = https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric;
         fetchWeather(url);
       });
     } else {
@@ -73,7 +73,7 @@ export default function Hero() {
         const humidity = data.main.humidity;
         const dewPoint = (temp - ((100 - humidity) / 5)).toFixed(2);
         const iconCode = data.weather[0].icon;
-        const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+        const iconUrl = http://openweathermap.org/img/wn/${iconCode}@2x.png;
 
         setWeatherData({
           cityName,
@@ -90,7 +90,8 @@ export default function Hero() {
           lon: data.coord.lon,
         });
 
-        showPlantRecommendations(temp, humidity, description);
+        // Panggil API rekomendasi tanaman setelah data cuaca didapatkan
+        fetchPlantRecommendations();
       } else {
         setWeatherData(null); 
       }
@@ -100,19 +101,15 @@ export default function Hero() {
     }
   };
 
-  // Fungsi untuk menampilkan rekomendasi tanaman berdasarkan cuaca
-  const showPlantRecommendations = (temp, humidity, condition) => {
-    let recommendations = '';
-
-    if (temp >= 25 && condition.includes('clear')) {
-      recommendations = 'Rekomendasi Tanaman: Tomat, Cabai, Bawang Merah';
-    } else if (humidity >= 80 && condition.includes('rain')) {
-      recommendations = 'Rekomendasi Tanaman: Padi, Jahe, Terong';
-    } else {
-      recommendations = 'Rekomendasi Tanaman: Mint, Selada, Kangkung';
+  // Fungsi untuk mengambil rekomendasi tanaman dari API lokal
+  const fetchPlantRecommendations = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/apibuah');
+      const plantData = await response.json();
+      setPlantRecommendations(plantData.recommendations);
+    } catch (error) {
+      console.error('Error fetching plant recommendations:', error);
     }
-
-    setPlantRecommendations(recommendations);
   };
 
   return (
@@ -120,7 +117,7 @@ export default function Hero() {
       <section
         className="relative bg-cover bg-center text-white justify-center flex flex-col items-left text-center pl-40 h-svh"
         style={{
-          backgroundImage: `url(${daisyImage})`,
+          backgroundImage: url(${daisyImage}),
         }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -132,10 +129,13 @@ export default function Hero() {
           <p className="text-lg md:text-xl mb-8">
             Weather & Bloom adalah situs web pendeteksi cuaca yang mudah digunakan untuk memberikan rekomendasi tanaman berdasarkan informasi cuaca terkini di kota Anda. Cukup masukkan nama kota, dan kami akan memberikan data cuaca yang akurat dan terkini agar tanaman Anda dapat tetap tumbuh dengan baik walaupun saat cuaca sulit diprediksi.
           </p>
+          <button className="bg-secondary-green hover:bg-secondary-green-dark text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+            Pelajari Lebih Lanjut
+          </button>
         </div>
       </section>
 
-      <div className="weather-container p-8 max-w-7xl mx-auto bg-white rounded-lg shadow-xl mt-8">
+      <div className="weather-container p-8 max-w-2xl mx-auto bg-white rounded-lg shadow-xl mt-8">
         <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">Pendeteksi Cuaca</h2>
 
         <div className="radio-group mb-6 text-center">
@@ -166,22 +166,20 @@ export default function Hero() {
         {method === 'manual' && (
           <div id="manual-input" className="mb-6">
             <p className="mb-2 text-lg text-center">Masukkan nama kota untuk mendapatkan cuaca terkini:</p>
-            <div className="mx-auto w-full max-w-[50%]">
-              <input
-                type="text"
-                id="city"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="Masukkan nama kota"
-                className="p-3 border border-gray-300 rounded-lg my-5 w-full text-lg"
-              />
-              <button
-                onClick={getWeatherManual}
-                className="bg-blue-500 text-white p-3 mb-5 rounded-lg w-full hover:bg-blue-600 transition duration-300"
-              >
-                Dapatkan Cuaca
-              </button>
-            </div>
+            <input
+              type="text"
+              id="city"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="Masukkan nama kota"
+              className="p-3 border border-gray-300 rounded-lg mb-4 w-full text-lg"
+            />
+            <button
+              onClick={getWeatherManual}
+              className="bg-blue-500 text-white p-3 rounded-lg w-full hover:bg-blue-600 transition duration-300"
+            >
+              Dapatkan Cuaca
+            </button>
           </div>
         )}
 
@@ -189,7 +187,7 @@ export default function Hero() {
           <button
             id="auto-detect"
             onClick={getWeatherAuto}
-            className="bg-blue-500 text-white p-3 rounded-lg w-full hover:bg-blue-600 transition duration-300 flex max-w-[50%] mb-12 mx-auto justify-center items-center"
+            className="bg-blue-500 text-white p-3 rounded-lg w-full hover:bg-blue-600 transition duration-300"
           >
             Deteksi Cuaca Otomatis
           </button>
@@ -197,7 +195,6 @@ export default function Hero() {
 
         {weatherData && (
           <>
-          <div className="flex flex-col md:flex-row mt-6 justify-center gap-28">
             <div className="weather-result mt-6 text-center">
               <p className="text-lg font-semibold">City: {weatherData.cityName}</p>
               <img
@@ -214,24 +211,12 @@ export default function Hero() {
               <p className="text-lg">Pressure: {weatherData.pressure} hPa</p>
               <p className="text-lg">Humidity: {weatherData.humidity}%</p>
               <p className="text-lg">Dew Point: {weatherData.dewPoint}°C</p>
-            </div>
-            
-            <div className="map-container md:w-1/2 mt-6 md:mt-0 md:ml-6">
-              <MyMapContainer lat={weatherData.lat} lon={weatherData.lon}/>
-            </div>
-          </div>
-          </>
-        )}
-      </div>
 
-      <div
-        id="plant-recommendations"
-        className="p-8 bg-gray-100 mt-8 rounded-lg text-center"
-      >
-        {plantRecommendations && (
-          <>
-            <h3 className="text-2xl font-semibold mb-4">Rekomendasi Tanaman</h3>
-            <p>{plantRecommendations}</p>
+              <h3 className="text-xl font-semibold mt-6">Rekomendasi Tanaman:</h3>
+              <p className="text-lg">{plantRecommendations}</p>
+            </div>
+
+            <MyMapContainer lat={weatherData.lat} lon={weatherData.lon} />
           </>
         )}
       </div>

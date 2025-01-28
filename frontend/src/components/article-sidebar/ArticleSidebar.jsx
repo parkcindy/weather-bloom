@@ -5,11 +5,7 @@ export default function ArticleSidebar({ service, farmer, duration, location }) 
     <div className='bg-lime-700 text-sm shadow-lg rounded-lg pt-2 mt-6 md:mt-0 md:absolute md:top-[34rem] md:right-0 md:w-[280px]'>
       <div className='flex flex-col gap-2 p-5 bg-white'>
         <div>
-          <p className='text-gray-500'>Farmer:</p>
-          <p className='font-medium'>{service}</p>
-        </div>
-        <div>
-          <p className='text-gray-500'>Farmer:</p>
+          <p className='text-gray-500'>Author:</p>
           <p className='font-medium'>{farmer}</p>
         </div>
         <div>

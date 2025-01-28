@@ -50,3 +50,6 @@ async function getArticles() {
 }
 
 export { query, testConnection, saveWeatherInput, getArticles };
+
+
+

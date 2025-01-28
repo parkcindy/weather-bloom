@@ -27,3 +27,4 @@ export const getWeatherHistory= async () => {
         throw error;
     }
 };
+

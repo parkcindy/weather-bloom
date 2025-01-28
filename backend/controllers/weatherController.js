@@ -52,3 +52,4 @@ export const getWeatherDataByInput = async (temperature, humidity, windSpeed, ci
         throw new Error("Failed to process weather input or fetch API data.");
     }
 };
+

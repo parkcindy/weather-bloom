@@ -9,3 +9,4 @@ export async function fetchArticles(req, res) {
         res.status(500).send("Gagal mengambil artikel");
     }
 }
+
